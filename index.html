@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .todo-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .todo-item input[type="text"] {
+            border: none;
+            outline: none;
+        }
+
+        .btn-group button {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container todo-container">
+        <h1 class="text-center mb-4">Todo List</h1>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Add a new todo item" id="todoInput">
+            <button class="btn btn-primary" onclick="addTodo()">Add</button>
+        </div>
+        <ul class="list-group" id="todoList">
+        </ul>
+    </div>
+
+    <script>
+        let todos = [];
+
+        function renderTodos() {
+            const todoList = document.getElementById('todoList');
+            todoList.innerHTML = '';
+            todos.forEach((todo, index) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item todo-item';
+                li.innerHTML = `
+                    <input type="text" value="${todo}" onchange="editTodo(${index}, this.value)" class="form-control">
+                    <div class="btn-group">
+                        <button class="btn btn-success" onclick="toggleComplete(${index})">${todo.completed ? 'Undo' : 'Done'}</button>
+                        <button class="btn btn-danger" onclick="deleteTodo(${index})">Delete</button>
+                    </div>
+                `;
+                todoList.appendChild(li);
+            });
+        }
+
+        function addTodo() {
+            const todoInput = document.getElementById('todoInput');
+            const todoText = todoInput.value.trim();
+            if (todoText) {
+                todos.push({ text: todoText, completed: false });
+                todoInput.value = '';
+                renderTodos();
+            }
+        }
+
+        function editTodo(index, newText) {
+            todos[index].text = newText;
+        }
+
+        function toggleComplete(index) {
+            todos[index].completed = !todos[index].completed;
+            renderTodos();
+        }
+
+        function deleteTodo(index) {
+            todos.splice(index, 1);
+            renderTodos();
+        }
+
+        renderTodos();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
